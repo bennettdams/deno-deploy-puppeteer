@@ -1,0 +1,1 @@
+deployctl types > deploy.d.ts

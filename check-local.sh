@@ -1,0 +1,1 @@
+deployctl check --libs="" main.ts
