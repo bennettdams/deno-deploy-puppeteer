@@ -3,7 +3,7 @@ import puppeteer, { Page } from "https://deno.land/x/puppeteer@9.0.1/mod.ts";
 
 let lastCheckTs: Date = new Date();
 let lastScreenshotPath: string | null = null;
-let lastScreenshot: Blob | null = null;
+let lastScreenshot: string | null = null;
 
 init();
 
@@ -13,18 +13,18 @@ async function takeScreenshot() {
   lastScreenshotPath = path;
 
   console.log("Init bot");
-  // const browser = await puppeteer.launch({ userDataDir: "puppeteer" });
-  const browser = await puppeteer.launch();
+  const browser = await puppeteer.launch({ userDataDir: "./puppeteer" });
   const page = await browser.newPage();
   page.setViewport({ width: 1920, height: 1080 });
   await page.goto("https://twitch.tv/montanablack88");
 
-  const screenshot = await page.screenshot();
+  const screenshot = (await page.screenshot({ encoding: "base64" })) as string;
+  lastScreenshot = screenshot;
 
-  if (screenshot instanceof Uint8Array)
-    lastScreenshot = URL.createObjectURL(
-      new Blob([screenshot.buffer], { type: "image/png" })
-    );
+  // if (screenshot instanceof Uint8Array)
+  //   lastScreenshot = URL.createObjectURL(
+  //     new Blob([screenshot.buffer], { type: "image/png" })
+  //   );
   // lastScreenshot = new Blob([screenshot.buffer], { type: "image/png" });
 
   await browser.close();
@@ -129,6 +129,10 @@ setInterval(() => {
 //   //   console.log(viewcount);
 // }
 
+function createImgSrcForBase64(imgBase64: string) {
+  return `data:image/png;base64, ${imgBase64}`;
+}
+
 async function handleRequest() {
   log("[REQ]");
 
@@ -136,7 +140,7 @@ async function handleRequest() {
 
   const lastScreenshotTemp = !lastScreenshot
     ? ""
-    : `<img src="${lastScreenshot}"'>`;
+    : `<img src="${createImgSrcForBase64(lastScreenshot)}">`;
   // const lastScreenshot = !lastScreenshotPath
   //   ? ""
   //   : `<img src="${lastScreenshotPath}"'>`;
