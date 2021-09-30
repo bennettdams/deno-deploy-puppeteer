@@ -12,7 +12,7 @@ setInterval(() => {
 
 addEventListener("fetch", (event) => {
   const response = new Response(`Count: ${count}`, {
-    headers: { "content-type": "text/plain" },
+    headers: { "content-type": "application/json" },
   });
   event.respondWith(response);
 });
