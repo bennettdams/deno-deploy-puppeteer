@@ -1,1 +1,1 @@
-deployctl run --libs="" --watch ./main.ts
+deployctl run --libs="" --watch --no-check ./main.ts
