@@ -15,7 +15,7 @@ async function takeScreenshot() {
   console.log("Init bot");
   const browser = await puppeteer.launch({
     userDataDir: "./puppeteer",
-    ignoreDefaultArgs: true,
+    args: ["--user-data-dir=./puppeteer"],
   });
   const page = await browser.newPage();
   page.setViewport({ width: 1920, height: 1080 });
